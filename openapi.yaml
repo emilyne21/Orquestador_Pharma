@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: PharmaTrack - Orquestador
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8084
+paths:
+  /health:
+    get:
+      summary: Healthcheck
+      responses:
+        "200": { description: OK }
+  /disponibilidad:
+    get:
+      summary: Disponibilidad por producto y distrito
+      parameters:
+        - in: query
+          name: producto
+          schema: { type: string }
+          description: Texto para buscar en Catálogo (si no envías id_producto).
+        - in: query
+          name: id_producto
+          schema: { type: array, items: { type: string } }
+          style: form
+          explode: true
+          description: Uno o varios IDs de producto.
+        - in: query
+          name: distrito
+          schema: { type: string }
+      responses:
+        "200":
+          description: Lista agrupada por producto
+  /receta/{id}/validacion:
+    get:
+      summary: Valida si una receta se puede dispensar en su sucursal; sugiere alternativas
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Resultado de validación
